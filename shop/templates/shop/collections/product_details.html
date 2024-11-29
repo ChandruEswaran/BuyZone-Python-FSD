@@ -1,0 +1,142 @@
+{% extends 'shop/layouts/main.html' %}
+{% block title %}
+    <title>BuyZone | Online Shopping</title>
+{% endblock title %}
+
+{% block content %}
+    <section class="bg-light py-4 my-5" style="min-height: 600px;">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <h4 class="mb-3"> {{collections}}</h4>
+                    <hr style="background-color: #b8bfc2;">
+                    {% include 'shop/inc/message.html' %}
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                          <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+                          <li class="breadcrumb-item"><a href="{% url 'products' collections.catagory.name %}">Products</a></li>
+                          <li class="breadcrumb-item active text-warning" aria-current="page">{{collections}}</li>
+                        </ol>
+                      </nav>
+                </div>
+                <div class="col-4 my-3 pic-box">
+                    {% if collections.quantity %}
+                    <div class="trending"><i class="fa fa-bolt"></i> Trending</div>
+                    {% endif %}
+                    <img src="{{ collections.products_image.url }}" class="card-img-top" alt="{{collections}}">
+                </div>
+                <div class="col-8 my-3">
+                    <h5 class="text-success">{{collections | upper}}</h5>
+                    <p>{{collections.vendor}}</p>
+                    <p>{{collections.description}}</p>
+                    <h6 class="my-2 text-danger">Current Price : Rs. <s>{{collections.original_price}}</s></h6>
+                    <h5 class="my-2 text-primary">Offer Price : Rs. {{collections.selling_price}}</h5>
+                    <div class="my-3">
+                        {% if collections.quantity > 0 %}
+                        <input type="hidden" value="{{collections.id}}" id="pid">
+                        <p>
+                            <div class="input-group" style="width: 150px;">
+                                <button class="input-group-text bg-success text-light" id="btsMinus"><i class="fa fa-trash"></i></button>
+                                <input type="text" name="qty" id="txtQty" value="1" class="form-control text-center">
+                                <button class="input-group-text bg-success text-light" id="btsPlus"><i class="fa fa-plus"></i></button>
+                            </div>
+                        </p>
+                        <button class="btn btn-primary" id="btnCart"><i class="fa fa-shopping-cart"></i> Add to Cart</button>
+                        {% else  %}
+                        <button class="btn btn-danger"><i class="fa fa-minus"></i> Out of Stock</button>
+                        {% endif %}
+                        <button class="btn btn-danger" id="btnFav"><i class="fa fa-heart"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const btsPlus = document.getElementById("btsPlus");
+        const btsMinus = document.getElementById("btsMinus");
+        const txtQty = document.getElementById("txtQty");
+        const pid = document.getElementById("pid");    
+        // const tkn = document.querySelector('[name="csrfmiddlewaretoken"]').value;
+        const btnCart = document.getElementById("btnCart");
+        const btnFav = document.getElementById("btnFav");
+
+        btsPlus.addEventListener("click", function() {
+            let qty = parseInt(txtQty.value,10);
+            qty = isNaN(qty)?0 : qty;
+            // console.log(qty);
+            if (qty<10){
+                qty++;
+                txtQty.value=qty;
+            }
+        });
+        btsMinus.addEventListener("click", function() {
+            let qty = parseInt(txtQty.value,10);
+            qty = isNaN(qty)?0 : qty;
+            if (qty>1){
+                qty--;
+                txtQty.value = qty;
+            }
+        });
+        btnCart.addEventListener("click", function() {
+            let qty = parseInt(txtQty.value, 10);
+            qty = isNaN(qty)?0 : qty;
+
+            if (qty>0) {
+                let postobj = {
+                    product_qty: qty,
+                    pid: pid.value,
+                    // token: tkn
+                }
+                // console.log(postobj);
+                fetch("/addtocart",{
+                    method: 'POST',
+                    credentials: 'same-origin',
+                    headers:{
+                        'Accept': 'application/json',
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'X-CSRFToken': '{{ csrf_token }}',
+                    },
+                    body: JSON.stringify(postobj)
+                })  .then(response => {
+                    return response.json();
+                })  .then(data => {
+                    // console.log(data);
+                    alert(data['status']);
+                })
+
+
+            }else {
+                alert("Please Enter The Quantity");
+            }
+        });
+
+        btnFav.addEventListener("click", function() {
+            
+                let postobj = {
+                    'pid': pid.value,
+                    // token: tkn
+                }
+                // console.log(postobj);
+                fetch("/fav",{
+                    method: 'POST',
+                    credentials: 'same-origin',
+                    headers:{
+                        'Accept': 'application/json',
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'X-CSRFToken': '{{ csrf_token }}',
+                    },
+                    body: JSON.stringify(postobj)
+                })  .then(response => {
+                    return response.json();
+                })  .then(data => {
+                    // console.log(data);
+                    alert(data['status']);
+                });
+
+        });
+    });
+</script>
+
+    
+{% endblock content %}

@@ -1,0 +1,20 @@
+<nav class="navbar navbar-expand-lg navbar-success bg-dark fixed-top">
+  <div class="container">
+    <a class="navbar-brand" href="{% url 'home' %}"><i class="fa fa-cart-plus"></i> BuyZone</a>
+    <div class="container_fluid">
+      <div class="navbar-nav ns-auto">
+          <a class="nav-link active" aria-current="page" href="{% url 'home' %}"><i class="fa fa-home"></i> Home</a>
+          {% if request.user.is_authenticated %}
+            <a class="nav-link active" aria-current="page" href="#"><i class="fa fa-user"></i> {{ request.user }}</a>
+            <a class="nav-link active" aria-current="page" href="{% url 'logout' %}"><i class="fa fa-sign-out"></i>Logout</a>
+          {% else %}
+            <a class="nav-link active" aria-current="page" href="{% url 'login' %}"><i class="fa fa-sign-in"></i> Login</a>
+            <a class="nav-link active" aria-current="page" href="{% url 'register' %}"><i class="fa fa-users"></i> Register</a>
+          {% endif %}
+            <a class="nav-link active" aria-current="page" href="{% url 'products' %}"><i class="fa fa-cubes"></i> Products</a>
+            <a class="nav-link active" aria-current="page" href="{% url 'cart' %}"><i class="fa fa-shopping-cart"></i> Cart</a>
+            <a class="nav-link active" aria-current="page" href="{% url 'favviewpage' %}"><i class="fa fa-heart"></i> Favourite</a>
+      </div>
+    </div>
+  </div>
+</nav>

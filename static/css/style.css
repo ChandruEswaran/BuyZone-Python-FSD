@@ -1,0 +1,61 @@
+.carousel-item img{
+    object-fit: cover;
+    object-position: top;
+    height: 60vh;
+    overflow: hidden;
+}
+a{
+    text-decoration: none;
+}
+
+.original_price{
+    font-weight: bold;
+    color: rgb(233, 17, 17);
+}
+
+.selling_price{
+    font-weight: bold;
+    background-color: rgb(142, 196, 61);
+    color: whitesmoke;
+    padding: 2px;
+    border-radius: 5px;
+}
+
+.pic-box{
+    position: relative;
+}
+
+.trending{
+    background-color: chocolate;
+    color: whitesmoke;
+    text-align: center;
+    font-weight: bold;
+    display: inline;
+    padding: 5px;
+    border-radius: 5px;
+    position: absolute;
+    top: 0;
+    right: 20px;
+    z-index: 10;
+}
+
+.card{
+    background: #e5e5e5 !important;
+    border: none !important;
+    border-radius: 20px !important;
+    box-shadow: 15px 20px 20px, 
+                inset 4px 4px 10px white !important;
+    overflow: hidden;
+    display: block;
+    justify-content: center;
+    align-items: center;
+    margin:20px 10px;
+    top: 0;
+    transition: .2s;
+}
+
+.card:hover{
+    box-shadow: inset 5px 5px 10px, 
+                inset -4px -4px 10px white !important;
+    transition: .2s;
+}

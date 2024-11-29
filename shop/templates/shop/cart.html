@@ -1,0 +1,60 @@
+{% extends 'shop/layouts/main.html' %}
+
+{% block title %}
+    <title>Cart Item | BuyZone</title>
+{% endblock title %}
+
+{% block content %}
+<section class="bg-light py-4 my-5" style="margin-top: 70px; min-height: 600px;">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <h4 class="mb-3">Cart Items</h4>
+                <hr style="border-color: #b8bfc2;">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                      <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+                      <li class="breadcrumb-item active"><a href="{% url 'products' %}"> Products</a></li>
+                    </ol>
+                  </nav>
+            </div>
+
+            <table>
+                <tr>
+                    <th>Image</th>
+                    <th>Product Name</th>
+                    <th>Unit Cost</th>
+                    <th>Quantity</th>
+                    <th>Price</th>
+                    <th>Remove Items</th>
+                </tr>
+                {% for item in cart %}
+                    <tr>
+                        <td><img src="{{ item.product.products_image.url }}" height="100px" alt="{{ item.name }}"></td>
+                        <td>{{ item.product.name }}</td>
+                        <td>{{ item.product.selling_price | stringformat:'d' }}</td>
+                        <td>{{ item.product_qty }} qty</td>
+                        <td class="amt">{{ item.total_cost | stringformat:'d' }}</td>
+                        <td><a href="{% url 'remove_cart' item.id %}" onclick="return confirm ('Are You Sure? to Remove')" class="btn btn-danger bth-sm"><i class="fa fa-trash"></i> Remove</a></td>
+                    </tr>
+                {% endfor %}
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td colspan="2"><b>Total Cost</b></td>
+                    <td id="net">0</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</section>
+<script>
+    const nodes = document.querySelectorAll('.amt');
+    const arr = Array.from(nodes);
+    const res = arr.reduce((acc, curr) => {
+        return acc + Number(curr.textContent);
+    }, 0);
+    document.getElementById("net").innerHTML = "Rs: " + res;
+</script>
+
+{% endblock content %}
